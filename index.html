@@ -1,107 +1,107 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>续班数据看板</title>
+    <title>续班看板</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f7fa; 
+            color: #333; 
             padding: 20px;
         }
-        .main-container { 
-            max-width: 1920px; 
-            margin: 0 auto;
+        .header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .header h1 { font-size: 30px; margin-bottom: 8px; font-weight: 700; letter-spacing: 1px; }
+        .header .date { font-size: 16px; opacity: 0.95; font-weight: 500; }
+        
+        .today-stats { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 30px; 
+        }
+        .stat-card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .stat-card .label { font-size: 14px; color: #666; margin-bottom: 8px; }
+        .stat-card .value { font-size: 32px; font-weight: bold; color: #667eea; }
+        .stat-card .sub { font-size: 12px; color: #999; margin-top: 4px; }
+
+        .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 25px;
+            margin-bottom: 30px;
         }
-        
-        .header { 
-            grid-column: 1 / -1;
-            text-align: center; 
-            margin-bottom: 20px; 
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-        .header h1 { 
-            font-size: 42px; 
-            color: #667eea;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .header .date { 
-            font-size: 20px; 
-            color: #666;
-        }
-        
-        .left-column, .right-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: stretch;
-        }
-        .left-column > .section, .right-column > .section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .section { 
+
+        .team-section { 
             background: white; 
             padding: 25px; 
-            border-radius: 16px; 
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border-radius: 12px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
         }
-        .section-title { 
+        .team-title { 
             font-size: 22px; 
             font-weight: bold; 
             margin-bottom: 20px; 
             padding-left: 12px;
-            border-left: 5px solid #667eea;
-            color: #333;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 12px;
+            margin-top: 20px;
         }
 
         table { width: 100%; border-collapse: collapse; }
         th { 
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 10px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px; 
             text-align: center; 
             font-weight: 600; 
-            font-size: 13px;
+            color: white;
+            border-bottom: 2px solid #5a67d8;
         }
         td { 
-            padding: 12px 10px; 
+            padding: 12px; 
             border-bottom: 1px solid #f0f0f0; 
-            font-size: 13px;
             text-align: center;
         }
-        tr:hover { background: #f8f9ff; }
-        tr:nth-child(even) { background: #fafbfc; }
+        tr:hover { background: #f8f9fa; }
         
-        .rank-badge { 
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px; 
-            height: 30px; 
+        .rank { 
+            display: inline-block; 
+            width: 28px; 
+            height: 28px; 
+            line-height: 28px; 
+            text-align: center; 
             border-radius: 50%; 
             font-weight: bold;
             font-size: 14px;
-            color: white;
         }
-        .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); }
-        .rank-2 { background: linear-gradient(135deg, #C0C0C0, #A0A0A0); }
-        .rank-3 { background: linear-gradient(135deg, #CD7F32, #B8860B); }
-        .rank-other { background: #e0e0e0; color: #666; }
+        .rank-1 { background: #ffd700; color: #333; }
+        .rank-2 { background: #c0c0c0; color: #333; }
+        .rank-3 { background: #cd7f32; color: white; }
+        .rank-other { background: #e9ecef; color: #666; }
 
-        .progress-container { 
+        .progress-bar { 
             width: 100%; 
             height: 8px; 
             background: #e9ecef; 
@@ -109,302 +109,311 @@
             overflow: hidden;
             margin-top: 4px;
         }
-        .progress-bar { 
+        .progress-fill { 
             height: 100%; 
             background: linear-gradient(90deg, #667eea, #764ba2);
             border-radius: 4px;
-            transition: width 0.5s ease;
+            transition: width 0.3s ease;
         }
         
-        .tag { 
+        .group-tag { 
             display: inline-block; 
-            padding: 3px 8px; 
-            border-radius: 5px; 
-            font-size: 11px;
-            font-weight: 500;
+            padding: 2px 8px; 
+            background: #e3f2fd; 
+            color: #1976d2; 
+            border-radius: 4px; 
+            font-size: 12px;
+            margin-right: 4px;
         }
-        .tag-group { background: #e3f2fd; color: #1976d2; }
-        .tag-manager { background: #fff3e0; color: #f57c00; }
 
-        .name-cell { font-weight: 600; color: #333; }
-        
-        @media (max-width: 1400px) {
-            .main-container { grid-template-columns: 1fr; }
+        .partner-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .partner-card {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        .partner-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        .partner-group {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .partner-completion {
+            font-size: 22px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .note { 
+            text-align: center; 
+            color: #999; 
+            font-size: 12px; 
+            margin-top: 30px; 
+            padding: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 22px; }
+            .team-section { padding: 15px; }
+            th, td { padding: 8px; font-size: 14px; }
+            .partner-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="header">
-            <h1>📊 入口班2期续班看板</h1>
-            <div class="date" id="currentDate"></div>
+    <div class="header">
+        <h1>📊 入口班3期续班看板</h1>
+        <div class="date" id="currentDate"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="team-section">
+            <div class="team-title">大班团队</div>
+            
+            <div class="section-label">小组排名</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">排名</th>
+                        <th style="width: 120px;">小组</th>
+                        <th style="width: 80px;">今日新增</th>
+                        <th style="width: 150px;">续班完成度</th>
+                    </tr>
+                </thead>
+                <tbody id="bigClassGroupRanking"></tbody>
+            </table>
+
+            <div class="section-label">全部伙伴排名</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">排名</th>
+                        <th style="width: 100px;">姓名</th>
+                        <th style="width: 120px;">小组</th>
+                        <th style="width: 80px;">今日新增</th>
+                        <th style="width: 150px;">续班完成度</th>
+                    </tr>
+                </thead>
+                <tbody id="bigClassPartnerTop8"></tbody>
+            </table>
         </div>
 
-        <!-- 左列：管理者排名 + 小组排名 -->
-        <div class="left-column">
-            <div class="section">
-                <div class="section-title">🎯 管理者续班排名</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 60px;">排名</th>
-                            <th style="width: 100px;">管理者</th>
-                            <th style="width: 120px;">所带小组</th>
-                            <th style="width: 80px;">今日新增</th>
-                            <th style="width: 200px;">综合续班完成度</th>
-                        </tr>
-                    </thead>
-                    <tbody id="managerTable"></tbody>
-                </table>
-            </div>
+        <div class="team-section">
+            <div class="team-title">AI 团队</div>
+            
+            <div class="section-label">小组排名</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">排名</th>
+                        <th style="width: 120px;">小组</th>
+                        <th style="width: 80px;">今日新增</th>
+                        <th style="width: 150px;">续班完成度</th>
+                    </tr>
+                </thead>
+                <tbody id="aiGroupRanking"></tbody>
+            </table>
 
-            <div class="section">
-                <div class="section-title">👥 小组续班排名</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 60px;">排名</th>
-                            <th style="width: 100px;">小组名称</th>
-                            <th style="width: 90px;">管理者</th>
-                            <th style="width: 80px;">今日新增</th>
-                            <th style="width: 200px;">平均续班完成度</th>
-                        </tr>
-                    </thead>
-                    <tbody id="groupTable"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 右列：伙伴TOP15 -->
-        <div class="right-column">
-            <div class="section">
-                <div class="section-title">🏆 伙伴续班完成度 TOP 15</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 60px;">排名</th>
-                            <th style="width: 100px;">姓名</th>
-                            <th style="width: 80px;">小组</th>
-                            <th style="width: 80px;">管理者</th>
-                            <th style="width: 70px;">今日新增</th>
-                            <th style="width: 220px;">续班完成度</th>
-                        </tr>
-                    </thead>
-                    <tbody id="partnerTable"></tbody>
-                </table>
-            </div>
+            <div class="section-label">全部伙伴排名</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">排名</th>
+                        <th style="width: 100px;">姓名</th>
+                        <th style="width: 120px;">小组</th>
+                        <th style="width: 80px;">今日新增</th>
+                        <th style="width: 150px;">续班完成度</th>
+                    </tr>
+                </thead>
+                <tbody id="aiPartnerTop8"></tbody>
+            </table>
         </div>
     </div>
 
+    <div class="note">
+        ⚠️ 注：以上数据为示例占位，实际使用时请替换 data 对象中的真实续班数据。组织架构基于图片信息生成。
+    </div>
+
     <script>
-        const orgData = {
-            managers: [
-                { name: '郭栩彤', groups: ['1组', '6组'] },
-                { name: '兰思虹', groups: ['2组', '8组'] },
-                { name: '任志昊', groups: ['3组', '5组'] },
-                { name: '陆佳卉', groups: ['4组', '7组'] }
+        // 组织架构与模拟数据（来自图片，续班数为示例值）
+        const data = {
+            todayNew: 12,
+            yesterdayChange: 3,
+            monthTotal: 156,
+            targetRate: 78,
+            overallRate: 82.5,
+            momChange: '+5.2%',
+            
+            bigClassGroups: [
+                { name: '大班1组', renewals: 45, rate: 82.3, todayNew: 5 },
+                { name: '大班2组', renewals: 38, rate: 75.6, todayNew: 3 },
+                { name: '大班3组', renewals: 42, rate: 79.8, todayNew: 4 }
             ],
-            groups: [
-                { id: '1组', manager: '郭栩彤', members: ['郭栩彤', '王振豪', '郗海琳', '黄家妮', '张  乐'] },
-                { id: '6组', manager: '郭栩彤', members: ['景梦花', '黄雅婷', '刘亦婷', '吴海波', '刘照辉'] },
-                { id: '2组', manager: '兰思虹', members: ['杨婉婷', '兰思虹', '司艺薇', '吴  乐', '罗小飞'] },
-                { id: '8组', manager: '兰思虹', members: ['李星雨', '张晅畅', '王亚楠', '张冰冰', '王胤之'] },
-                { id: '3组', manager: '任志昊', members: ['税超兰', '梁  亮', '滕佳音', '赵  艳', '孙梦媛'] },
-                { id: '5组', manager: '任志昊', members: ['孟佳怡', '史小盈', '裴一禧', '李  想', '任志昊'] },
-                { id: '4组', manager: '陆佳卉', members: ['王  怡', '杨佳毅', '杨一菲', '陆佳卉', '伍  倩'] },
-                { id: '7组', manager: '陆佳卉', members: ['李佳幸', '张心茹', '温  妮', '罗康杰', '张  泰'] }
+            
+            aiGroups: [
+                { name: 'AI1组', renewals: 35, rate: 71.2, todayNew: 2 },
+                { name: 'AI2组', renewals: 40, rate: 76.5, todayNew: 4 },
+                { name: 'AI3组', renewals: 32, rate: 68.9, todayNew: 1 }
+            ],
+            
+            partners: [
+                { name: '李晨曦', group: '大班1组', target: 1, completed: 0, todayNew: 0 },
+                { name: '全志成', group: '大班1组', target: 1, completed: 0, todayNew: 0 },
+                { name: '申晨晨', group: '大班1组', target: 1, completed: 0, todayNew: 0 },
+                { name: '王延昭', group: '大班1组', target: 1, completed: 0, todayNew: 0 },
+                { name: '宋卓威', group: '大班1组', target: 1, completed: 0, todayNew: 0 },
+                { name: '郑子柔', group: '大班2组', target: 1, completed: 0, todayNew: 0 },
+                { name: '汪明雯', group: '大班2组', target: 1, completed: 0, todayNew: 0 },
+                { name: '袁 月', group: '大班2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '杨 琳', group: '大班2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '王毅颖', group: '大班2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '时冰宁', group: '大班3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '杨 阳', group: '大班3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '邓冰梅', group: '大班3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '樊勇山', group: '大班3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '方佳佳', group: '大班3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '刘 佳', group: 'AI1组', target: 50, completed: 0, todayNew: 0 },
+                { name: '刘洋帆', group: 'AI1组', target: 50, completed: 0, todayNew: 0 },
+                { name: '王青瑶', group: 'AI1组', target: 50, completed: 0, todayNew: 0 },
+                { name: '白雨晴', group: 'AI1组', target: 50, completed: 0, todayNew: 0 },
+                { name: '师 梦', group: 'AI1组', target: 50, completed: 0, todayNew: 0 },
+                { name: '王家昱', group: 'AI2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '赵倩楠', group: 'AI2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '白苗苗', group: 'AI2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '何雨轩', group: 'AI2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '索佳怡', group: 'AI2组', target: 50, completed: 0, todayNew: 0 },
+                { name: '饶苏娜', group: 'AI3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '雷 蓉', group: 'AI3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '王 鹏', group: 'AI3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '何婉婷', group: 'AI3组', target: 50, completed: 0, todayNew: 0 },
+                { name: '吴 茜', group: 'AI3组', target: 50, completed: 0, todayNew: 0 }
             ]
         };
 
-        // 数据源 - 直接嵌入避免跨域问题
-        const partnerData = [
-          {"name": "郭栩彤", "group": "1组", "manager": "郭栩彤", "renewals": 11, "target": 25, "todayNew": 1},
-          {"name": "王振豪", "group": "1组", "manager": "郭栩彤", "renewals": 16, "target": 27, "todayNew": 1},
-          {"name": "郗海琳", "group": "1组", "manager": "郭栩彤", "renewals": 11, "target": 23, "todayNew": 1},
-          {"name": "黄家妮", "group": "1组", "manager": "郭栩彤", "renewals": 16, "target": 23, "todayNew": 1},
-          {"name": "张  乐", "group": "1组", "manager": "郭栩彤", "renewals": 16, "target": 22, "todayNew": 1},
-          {"name": "景梦花", "group": "6组", "manager": "郭栩彤", "renewals": 7, "target": 26, "todayNew": 0},
-          {"name": "黄雅婷", "group": "6组", "manager": "郭栩彤", "renewals": 9, "target": 29, "todayNew": 0},
-          {"name": "刘亦婷", "group": "6组", "manager": "郭栩彤", "renewals": 7, "target": 26, "todayNew": 0},
-          {"name": "吴海波", "group": "6组", "manager": "郭栩彤", "renewals": 7, "target": 27, "todayNew": 0},
-          {"name": "刘照辉", "group": "6组", "manager": "郭栩彤", "renewals": 7, "target": 26, "todayNew": 0},
-          {"name": "杨婉婷", "group": "2组", "manager": "兰思虹", "renewals": 18, "target": 27, "todayNew": 0},
-          {"name": "兰思虹", "group": "2组", "manager": "兰思虹", "renewals": 22, "target": 32, "todayNew": 0},
-          {"name": "司艺薇", "group": "2组", "manager": "兰思虹", "renewals": 20, "target": 27, "todayNew": 0},
-          {"name": "吴  乐", "group": "2组", "manager": "兰思虹", "renewals": 21, "target": 28, "todayNew": 0},
-          {"name": "罗小飞", "group": "2组", "manager": "兰思虹", "renewals": 23, "target": 28, "todayNew": 1},
-          {"name": "李星雨", "group": "8组", "manager": "兰思虹", "renewals": 8, "target": 21, "todayNew": 0},
-          {"name": "张晅畅", "group": "8组", "manager": "兰思虹", "renewals": 8, "target": 24, "todayNew": 0},
-          {"name": "王亚楠", "group": "8组", "manager": "兰思虹", "renewals": 8, "target": 21, "todayNew": 0},
-          {"name": "张冰冰", "group": "8组", "manager": "兰思虹", "renewals": 8, "target": 22, "todayNew": 0},
-          {"name": "王胤之", "group": "8组", "manager": "兰思虹", "renewals": 7, "target": 22, "todayNew": 0},
-          {"name": "税超兰", "group": "3组", "manager": "任志昊", "renewals": 13, "target": 29, "todayNew": 0},
-          {"name": "梁  亮", "group": "3组", "manager": "任志昊", "renewals": 17, "target": 36, "todayNew": 0},
-          {"name": "滕佳音", "group": "3组", "manager": "任志昊", "renewals": 13, "target": 30, "todayNew": 0},
-          {"name": "赵  艳", "group": "3组", "manager": "任志昊", "renewals": 15, "target": 30, "todayNew": 0},
-          {"name": "孙梦媛", "group": "3组", "manager": "任志昊", "renewals": 12, "target": 30, "todayNew": 0},
-          {"name": "孟佳怡", "group": "5组", "manager": "任志昊", "renewals": 14, "target": 29, "todayNew": 0},
-          {"name": "史小盈", "group": "5组", "manager": "任志昊", "renewals": 22, "target": 33, "todayNew": 0},
-          {"name": "裴一禧", "group": "5组", "manager": "任志昊", "renewals": 14, "target": 27, "todayNew": 0},
-          {"name": "李  想", "group": "5组", "manager": "任志昊", "renewals": 22, "target": 29, "todayNew": 0},
-          {"name": "任志昊", "group": "5组", "manager": "任志昊", "renewals": 18, "target": 29, "todayNew": 0},
-          {"name": "王  怡", "group": "4组", "manager": "陆佳卉", "renewals": 10, "target": 26, "todayNew": 1},
-          {"name": "杨佳毅", "group": "4组", "manager": "陆佳卉", "renewals": 13, "target": 31, "todayNew": 1},
-          {"name": "杨一菲", "group": "4组", "manager": "陆佳卉", "renewals": 11, "target": 26, "todayNew": 1},
-          {"name": "陆佳卉", "group": "4组", "manager": "陆佳卉", "renewals": 11, "target": 29, "todayNew": 1},
-          {"name": "伍  倩", "group": "4组", "manager": "陆佳卉", "renewals": 12, "target": 25, "todayNew": 1},
-          {"name": "李佳幸", "group": "7组", "manager": "陆佳卉", "renewals": 7, "target": 22, "todayNew": 1},
-          {"name": "张心茹", "group": "7组", "manager": "陆佳卉", "renewals": 6, "target": 25, "todayNew": 1},
-          {"name": "温  妮", "group": "7组", "manager": "陆佳卉", "renewals": 8, "target": 22, "todayNew": 2},
-          {"name": "罗康杰", "group": "7组", "manager": "陆佳卉", "renewals": 7, "target": 23, "todayNew": 1},
-          {"name": "张  泰", "group": "7组", "manager": "陆佳卉", "renewals": 6, "target": 23, "todayNew": 1}
-        ];
-
-        function loadPartnerData() {
-            // 计算续班完成度并返回数据
-            return Promise.resolve(partnerData.map(p => ({
+        // 自动计算伙伴续班完成度
+        function calculatePartnerCompletion(partners) {
+            return partners.map(p => ({
                 ...p,
-                rate: parseFloat(((p.renewals / p.target) * 100).toFixed(1))
-            })));
+                completion: p.target > 0 ? Math.round((p.completed / p.target) * 100) : 0
+            }));
         }
 
-        function calculateGroupStats(partners) {
-            const groupMap = {};
-            orgData.groups.forEach(g => {
-                groupMap[g.id] = { 
-                    id: g.id, 
-                    manager: g.manager, 
-                    members: g.members.length,
-                    totalRenewals: 0,
-                    totalTarget: 0,
-                    todayNew: 0
-                };
+        // 自动计算小组数据（从伙伴数据聚合）
+        function calculateGroupData(partners, groupNames) {
+            const groups = [];
+            groupNames.forEach(name => {
+                const members = partners.filter(p => p.group === name);
+                const totalTarget = members.reduce((sum, p) => sum + p.target, 0);
+                const totalCompleted = members.reduce((sum, p) => sum + p.completed, 0);
+                const totalTodayNew = members.reduce((sum, p) => sum + p.todayNew, 0);
+                const rate = totalTarget > 0 ? Math.round((totalCompleted / totalTarget) * 100) : 0;
+                
+                groups.push({
+                    name: name,
+                    renewals: totalCompleted,
+                    rate: rate,
+                    todayNew: totalTodayNew
+                });
             });
-            
-            partners.forEach(p => {
-                if (groupMap[p.group]) {
-                    groupMap[p.group].totalRenewals += p.renewals;
-                    groupMap[p.group].totalTarget += p.target;
-                    groupMap[p.group].todayNew += (p.todayNew || 0);
-                }
-            });
-            
-            Object.values(groupMap).forEach(g => {
-                g.avgRate = ((g.totalRenewals / g.totalTarget) * 100).toFixed(1);
-            });
-            
-            return Object.values(groupMap).sort((a, b) => b.avgRate - a.avgRate);
+            return groups;
         }
 
-        function calculateManagerStats(groupStats) {
-            const managerMap = {};
-            orgData.managers.forEach(m => {
-                managerMap[m.name] = { 
-                    name: m.name, 
-                    groups: m.groups.join('、'),
-                    totalMembers: 0,
-                    totalRenewals: 0,
-                    totalTarget: 0,
-                    todayNew: 0
-                };
-            });
-            
-            groupStats.forEach(g => {
-                const manager = managerMap[g.manager];
-                if (manager) {
-                    manager.totalMembers += g.members;
-                    manager.totalRenewals += g.totalRenewals;
-                    manager.totalTarget += g.totalTarget;
-                    manager.todayNew += g.todayNew;
-                }
-            });
-            
-            Object.values(managerMap).forEach(m => {
-                m.comprehensiveRate = ((m.totalRenewals / m.totalTarget) * 100).toFixed(1);
-            });
-            
-            return Object.values(managerMap).sort((a, b) => b.comprehensiveRate - a.comprehensiveRate);
+        function initDate() {
+            const now = new Date();
+            const days = ['周日','周一','周二','周三','周四','周五','周六'];
+            document.getElementById('currentDate').textContent = 
+                `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 ${days[now.getDay()]}`;
         }
 
         function renderRank(index) {
-            if (index === 0) return '<span class="rank-badge rank-1">1</span>';
-            if (index === 1) return '<span class="rank-badge rank-2">2</span>';
-            if (index === 2) return '<span class="rank-badge rank-3">3</span>';
-            return `<span class="rank-badge rank-other">${index + 1}</span>`;
+            if (index === 0) return '<span class="rank rank-1">1</span>';
+            if (index === 1) return '<span class="rank rank-2">2</span>';
+            if (index === 2) return '<span class="rank rank-3">3</span>';
+            return `<span class="rank rank-other">${index + 1}</span>`;
         }
 
         function renderProgressBar(rate) {
             const width = Math.min(rate, 100);
             return `
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 600; min-width: 45px;">${rate}%</span>
-                    <div class="progress-container" style="flex: 1;">
-                        <div class="progress-bar" style="width: ${width}%"></div>
-                    </div>
+                <div>${rate}%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${width}%"></div>
                 </div>
             `;
         }
 
-        function initDashboard() {
-            const now = new Date();
-            const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
-            document.getElementById('currentDate').textContent = 
-                `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`;
-
-            // 从 data.json 加载真实数据
-            loadPartnerData().then(partners => {
-                // 按续班完成度降序排序
-                partners.sort((a, b) => b.rate - a.rate);
-
-                const groupStats = calculateGroupStats(partners);
-                const managerStats = calculateManagerStats(groupStats);
-
-                // 渲染TOP 15伙伴
-                const partnerTbody = document.getElementById('partnerTable');
-                partners.slice(0, 15).forEach((p, i) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${renderRank(i)}</td>
-                        <td class="name-cell">${p.name}</td>
-                        <td><span class="tag tag-group">${p.group}</span></td>
-                        <td><span class="tag tag-manager">${p.manager}</span></td>
-                        <td style="font-weight: 600; color: #667eea;">${p.todayNew || 0}</td>
-                        <td>${renderProgressBar(p.rate)}</td>
-                    `;
-                    partnerTbody.appendChild(row);
-                });
-
-                // 渲染小组排名
-                const groupTbody = document.getElementById('groupTable');
-                groupStats.forEach((g, i) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${renderRank(i)}</td>
-                        <td class="name-cell">${g.id}</td>
-                        <td><span class="tag tag-manager">${g.manager}</span></td>
-                        <td style="font-weight: 600; color: #667eea;">${g.todayNew || 0}</td>
-                        <td>${renderProgressBar(parseFloat(g.avgRate))}</td>
-                    `;
-                    groupTbody.appendChild(row);
-                });
-
-                // 渲染管理者排名
-                const managerTbody = document.getElementById('managerTable');
-                managerStats.forEach((m, i) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${renderRank(i)}</td>
-                        <td class="name-cell">${m.name}</td>
-                        <td>${m.groups}</td>
-                        <td style="font-weight: 600; color: #667eea;">${m.todayNew || 0}</td>
-                        <td>${renderProgressBar(parseFloat(m.comprehensiveRate))}</td>
-                    `;
-                    managerTbody.appendChild(row);
-                });
-            }).catch(error => {
-                console.error('加载数据失败:', error);
-                alert('无法加载 data.json，请确保文件存在且格式正确');
+        function renderGroupRanking(groups, containerId) {
+            const sorted = [...groups].sort((a, b) => b.rate - a.rate);
+            const tbody = document.getElementById(containerId);
+            tbody.innerHTML = '';
+            
+            sorted.forEach((group, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${renderRank(index)}</td>
+                    <td><strong>${group.name}</strong></td>
+                    <td style="text-align: center; font-weight: 600; color: #667eea;">${group.todayNew || 0}</td>
+                    <td>${renderProgressBar(group.rate)}</td>
+                `;
+                tbody.appendChild(row);
             });
+        }
+
+        function renderPartnerTop8(partners, teamType, containerId) {
+            const filtered = partners.filter(p => 
+                teamType === 'big' ? p.group.startsWith('大班') : p.group.startsWith('AI')
+            );
+            const sorted = filtered.sort((a, b) => b.completion - a.completion);
+            const tbody = document.getElementById(containerId);
+            tbody.innerHTML = '';
+            
+            sorted.forEach((partner, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${renderRank(index)}</td>
+                    <td><strong>${partner.name}</strong></td>
+                    <td><span class="group-tag">${partner.group}</span></td>
+                    <td style="text-align: center; font-weight: 600; color: #667eea;">${partner.todayNew || 0}</td>
+                    <td>${renderProgressBar(partner.completion)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function initDashboard() {
+            initDate();
+            
+            // 自动计算伙伴完成度
+            const partnersWithCompletion = calculatePartnerCompletion(data.partners);
+            
+            // 自动计算小组数据
+            const bigClassGroupNames = ['大班1组', '大班2组', '大班3组'];
+            const aiGroupNames = ['AI1组', 'AI2组', 'AI3组'];
+            const bigClassGroups = calculateGroupData(partnersWithCompletion, bigClassGroupNames);
+            const aiGroups = calculateGroupData(partnersWithCompletion, aiGroupNames);
+            
+            renderGroupRanking(bigClassGroups, 'bigClassGroupRanking');
+            renderGroupRanking(aiGroups, 'aiGroupRanking');
+            renderPartnerTop8(partnersWithCompletion, 'big', 'bigClassPartnerTop8');
+            renderPartnerTop8(partnersWithCompletion, 'ai', 'aiPartnerTop8');
         }
 
         window.addEventListener('DOMContentLoaded', initDashboard);
