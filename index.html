@@ -300,11 +300,11 @@
                 { name: '白苗苗', group: 'AI2组', target: 20, completed: 3, todayNew: 0 },
                 { name: '何雨轩', group: 'AI2组', target: 21, completed: 5, todayNew: 0 },
                 { name: '索佳怡', group: 'AI2组', target: 21, completed: 4, todayNew: 0 },
-                { name: '饶苏娜', group: 'AI3组', target: 17, completed: 0, todayNew: 0 },
-                { name: '雷  蓉', group: 'AI3组', target: 20, completed: 2, todayNew: 0 },
-                { name: '王  鹏', group: 'AI3组', target: 17, completed: 0, todayNew: 0 },
-                { name: '何婉婷', group: 'AI3组', target: 18, completed: 1, todayNew: 0 },
-                { name: '吴  茜', group: 'AI3组', target: 18, completed: 1, todayNew: 0 }
+                { name: '饶苏娜', group: 'AI3组', target: 17, completed: 1, todayNew: 0 },
+                { name: '雷  蓉', group: 'AI3组', target: 20, completed: 3, todayNew: 0 },
+                { name: '王  鹏', group: 'AI3组', target: 17, completed: 1, todayNew: 0 },
+                { name: '何婉婷', group: 'AI3组', target: 18, completed: 2, todayNew: 0 },
+                { name: '吴  茜', group: 'AI3组', target: 18, completed: 2, todayNew: 0 }
             ]
         };
 
@@ -312,7 +312,7 @@
         function calculatePartnerCompletion(partners) {
             return partners.map(p => ({
                 ...p,
-                completion: p.target > 0 ? Math.round((p.completed / p.target) * 100) : 0
+                completion: p.target > 0 ? ((p.completed / p.target) * 100).toFixed(2) : '0.00'
             }));
         }
 
@@ -324,12 +324,12 @@
                 const totalTarget = members.reduce((sum, p) => sum + p.target, 0);
                 const totalCompleted = members.reduce((sum, p) => sum + p.completed, 0);
                 const totalTodayNew = members.reduce((sum, p) => sum + p.todayNew, 0);
-                const rate = totalTarget > 0 ? Math.round((totalCompleted / totalTarget) * 100) : 0;
+                const rate = totalTarget > 0 ? ((totalCompleted / totalTarget) * 100).toFixed(2) : '0.00';
                 
                 groups.push({
                     name: name,
                     renewals: totalCompleted,
-                    rate: rate,
+                    rate: parseFloat(rate),
                     todayNew: totalTodayNew
                 });
             });
